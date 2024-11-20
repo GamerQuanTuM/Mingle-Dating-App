@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:latest  # Use the latest PostgreSQL image
+    container_name: postgres_db  # Name for the container
+    restart: always  # Restart policy for the container
+    environment:
+      POSTGRES_USER: root  # Set the default username
+      POSTGRES_PASSWORD: admin  # Set the default password
+      POSTGRES_DB: social_heart  # Set the default database name
+    ports:
+      - "5432:5432"  # Expose PostgreSQL port
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist data
+
+  redis:
+    image: redis:latest  # Use the latest Redis image
+    container_name: redis_db  # Name for the container
+    restart: always  # Restart policy for the container
+    ports:
+      - "6379:6379"  # Expose Redis port
+    volumes:
+      - redis_data:/data  # Persist Redis data
+
+volumes:
+  postgres_data:  # Create a named volume for PostgreSQL data persistence
+  redis_data:  # Create a named volume for Redis data persistence

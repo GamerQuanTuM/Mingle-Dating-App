@@ -1,0 +1,82 @@
+# Global rules for any project
+*.log
+*.pyc
+*.pyo
+*.pyd
+*.swp
+.DS_Store
+
+# ----------------
+# FastAPI (server)
+# ----------------
+# Byte-compiled files
+server/__pycache__/
+server/*.pyc
+server/*.pyo
+server/*.pyd
+
+# Virtual environment
+server/venv/
+server/.env/
+server/.env.*
+server/*.venv
+server/*.env
+server/.Python
+
+# Jupyter Notebook checkpoints
+server/.ipynb_checkpoints/
+
+# Pipenv & Poetry
+server/Pipfile
+server/Pipfile.lock
+server/poetry.lock
+server/poetry.toml
+
+# Pytest
+server/.cache/
+server/pytest_cache/
+
+# Logs
+server/logs/
+server/*.log
+
+# Static/media files (if dynamically generated)
+server/static/
+server/media/
+
+# ----------------
+# Flutter (client)
+# ----------------
+# Miscellaneous
+client/*.class
+client/.buildlog/
+client/.history
+client/.svn/
+client/migrate_working_dir/
+
+# IntelliJ-related
+client/*.iml
+client/*.ipr
+client/*.iws
+client/.idea/
+
+# Flutter/Dart/Pub-related
+client/**/doc/api/
+client/**/ios/Flutter/.last_build_id
+client/.dart_tool/
+client/.flutter-plugins
+client/.flutter-plugins-dependencies
+client/.pub-cache/
+client/.pub/
+client/build/
+
+# Symbolication
+client/app.*.symbols
+
+# Obfuscation
+client/app.*.map.json
+
+# Android Studio build artifacts
+client/android/app/debug
+client/android/app/profile
+client/android/app/release

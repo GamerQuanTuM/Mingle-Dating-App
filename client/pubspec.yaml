@@ -1,0 +1,57 @@
+name: social_heart
+description: "A Flutter Dating App"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  shared_preferences: ^2.3.2
+  file_picker: ^8.1.2
+  flutter_svg: ^2.0.10+1
+  country_code_picker: ^3.0.0
+  intl: ^0.19.0
+  fpdart: ^1.1.0
+  http: ^1.2.2
+  dotted_border: ^2.1.0
+  top_modal_sheet: ^2.1.0
+  swipe_cards: ^2.0.0+1
+  collection: ^1.18.0
+  skeletonizer: ^1.4.2
+  google_fonts: ^6.2.1
+  socket_io_client: ^3.0.1
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  riverpod_generator: ^2.4.3
+  build_runner: ^2.4.13
+  riverpod_lint: ^2.3.13
+  ansi_styles: ^0.3.2+1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  
