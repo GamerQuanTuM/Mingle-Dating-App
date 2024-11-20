@@ -12,6 +12,7 @@ from middleware.auth_middleware import auth_middleware
 from models.asset import Asset
 
 router = APIRouter()
+router = APIRouter(tags=["Asset"])
 
 
 @router.post("/upload", status_code=201)

@@ -13,6 +13,7 @@ from middleware.auth_middleware import auth_middleware
 from schema.user_match import UserMatch
 
 router = APIRouter()
+router = APIRouter(tags=["Match"])
 
 
 @router.post("/create-match")
