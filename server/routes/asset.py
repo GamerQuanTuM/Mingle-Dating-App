@@ -11,7 +11,6 @@ from config.supabase_client import upload_to_supabase
 from middleware.auth_middleware import auth_middleware
 from models.asset import Asset
 
-router = APIRouter()
 router = APIRouter(tags=["Asset"])
 
 
