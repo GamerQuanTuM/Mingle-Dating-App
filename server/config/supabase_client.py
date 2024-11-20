@@ -25,8 +25,7 @@ async def upload_to_supabase(file: UploadFile, file_type: str,user_id:str):
     extension = filename_parts[1] if len(filename_parts) > 1 else ''
 
     # Create new filename with timestamp
-    new_filename = f"{base_name}_{timestamp}.{
-        extension}" if extension else f"{base_name}_{timestamp}"
+    new_filename = f"{base_name}_{timestamp}.{extension}" if extension else f"{base_name}_{timestamp}"
 
     # Generate unique ID for the file path
     file_path = f"{file_type}/{user_id}/{new_filename}"
