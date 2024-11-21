@@ -219,8 +219,6 @@ class _ChatPageState extends ConsumerState<ChatPage>
 
     final unseenCounts = ref.watch(unseenCountsProvider);
 
-    print(unseenCounts);
-
     return Scaffold(
       backgroundColor: Pallete.white,
       appBar: AppBar(

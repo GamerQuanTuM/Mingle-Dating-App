@@ -230,106 +230,102 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      body: Skeletonizer(
-        enabled: _isLoading,
-        child: (_matchEngine == null || _swipeItems.isEmpty)
-            ? Center(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: DottedBorder(
-                    color: Pallete.primaryBorder,
-                    strokeWidth: 2,
-                    dashPattern: const [4, 3],
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(12),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: const Center(
-                        child: Text(
-                          "No more matches",
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            : Column(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          child: _isLoading
-                              ? SwipeCards(
-                                  matchEngine: _matchEngine!,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return _buildCardContent(
-                                      Content(
-                                        name: "John Doe",
-                                        age: "25",
-                                        gender: "Male",
-                                        imageUrl:
-                                            "assets/images/default_profile.jpg",
-                                        passionList: [
-                                          "Travel",
-                                          "Music",
-                                          "Sports"
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  onStackFinished: () {},
-                                )
-                              : SwipeCards(
-                                  matchEngine: _matchEngine!,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    if (index >= _swipeItems.length) {
-                                      return const SizedBox.shrink();
-                                    }
-                                    final content =
-                                        _swipeItems[index].content as Content;
-                                    return _buildCardContent(content);
-                                  },
-                                  onStackFinished: () {
-                                    if (!_isEnd && !_isLoading) {
-                                      _loadMoreProfiles();
-                                    }
-                                  },
-                                  itemChanged: (items, index) {},
-                                ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 100),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildActionButton(Icons.close, Colors.red),
-                        _buildActionButton(
-                            Icons.favorite, Pallete.primaryPurple),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Skeletonizer(
+              enabled: _isLoading,
+              child: (_matchEngine == null || _swipeItems.isEmpty)
+                  ? _buildEmptyState(constraints)
+                  : _buildMatchContent(constraints),
+            );
+          },
+        ),
       ),
+    );
+  }
+
+  Widget _buildEmptyState(BoxConstraints constraints) {
+    return Center(
+      child: SizedBox(
+        height: constraints.maxHeight * 0.7,
+        width: constraints.maxWidth * 0.8,
+        child: DottedBorder(
+          color: Pallete.primaryBorder,
+          strokeWidth: 2,
+          dashPattern: const [4, 3],
+          borderType: BorderType.RRect,
+          radius: const Radius.circular(12),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: const Center(
+              child: Text(
+                "No more matches",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMatchContent(BoxConstraints constraints) {
+    return Column(
+      children: [
+        Expanded(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 500,
+            ),
+            child: SwipeCards(
+              matchEngine: _matchEngine!,
+              itemBuilder: (BuildContext context, int index) {
+                if (index >= _swipeItems.length) {
+                  return const SizedBox.shrink();
+                }
+                final content = _swipeItems[index].content as Content;
+                return _buildCardContent(content);
+              },
+              onStackFinished: () {
+                if (!_isEnd && !_isLoading) {
+                  _loadMoreProfiles();
+                }
+              },
+              itemChanged: (items, index) {},
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal:
+                constraints.maxWidth * 0.2, // Responsive horizontal padding
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildActionButton(Icons.close, Colors.red),
+              _buildActionButton(
+                Icons.favorite,
+                Pallete.primaryPurple,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+            height: constraints.maxHeight * 0.02), // Responsive bottom padding
+      ],
     );
   }
 
   Widget _buildCardContent(Content content) {
     return Container(
       width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         image: DecorationImage(
@@ -355,7 +351,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 45),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,

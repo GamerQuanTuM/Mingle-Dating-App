@@ -139,7 +139,7 @@ async def chat(sid, data):
                         "match_id": str(new_message.match_id),
                         "sender_id": str(new_message.sender_id),
                         "recipient_id": str(new_message.recipient_id),
-                        "content": str(new_message.content),
+                        "content": new_message.content,
                         "content_type": str(new_message.content_type),
                         "file_url": new_message.file_url,
                         "seen": new_message.seen,

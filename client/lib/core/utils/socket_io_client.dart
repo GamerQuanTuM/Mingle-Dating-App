@@ -76,12 +76,22 @@ class SocketSingleton {
   }
 
   IO.Socket getSocket() {
+    const String productionUrl = 'wss://mingle-dating-app.onrender.com';
+    const String developmentUrl = 'ws://localhost:8000';
+    // Use the production URL when deploying to production
+    const String serverUrl = bool.fromEnvironment('dart.vm.product')
+        ? productionUrl
+        : developmentUrl;
+
     return IO.io(
-      'ws://localhost:8000',
+      serverUrl,
       IO.OptionBuilder()
-          .setTransports(['websocket', 'polling'])
+          .setTransports([
+            'websocket',
+            'polling'
+          ]) // Support WebSocket and fallback to polling
           .enableForceNew()
-          .setPath('/sockets')
+          .setPath('/sockets') // Adjust path if necessary
           .build(),
     );
   }

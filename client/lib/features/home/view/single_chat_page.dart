@@ -120,7 +120,7 @@ class _SingleChatPageState extends ConsumerState<SingleChatPage>
           _markMessagesAsSeen();
         }
       } catch (e) {
-        print('Error parsing message: $e');
+        debugPrint('Error parsing message: $e');
       }
     }
   }
@@ -297,6 +297,8 @@ class _SingleChatPageState extends ConsumerState<SingleChatPage>
                   final isCurrentUser = message.senderId ==
                       ref.read(currentUserNotifierProvider)?.id;
 
+                  print(message.content == null ? true : false);
+
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Row(
@@ -408,8 +410,8 @@ class _SingleChatPageState extends ConsumerState<SingleChatPage>
                                         ),
                                       ),
                                       if (message.contentType == "file" &&
-                                              message.content != null ||
-                                          message.content == "None")
+                                          (message.content != null ||
+                                              message.content == "None"))
                                         Container(
                                           width:
                                               MediaQuery.of(context).size.width,
@@ -426,7 +428,10 @@ class _SingleChatPageState extends ConsumerState<SingleChatPage>
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 16, vertical: 12),
                                           child: Text(
-                                            message.content ?? '',
+                                            (message.content != null ||
+                                                    message.content == "None")
+                                                ? message.content
+                                                : '',
                                             style: TextStyle(
                                               color: isCurrentUser
                                                   ? Pallete.white
@@ -441,7 +446,10 @@ class _SingleChatPageState extends ConsumerState<SingleChatPage>
                                     ],
                                   )
                                 : Text(
-                                    message.content ?? '',
+                                    (message.content != null ||
+                                            message.content == "None")
+                                        ? message.content
+                                        : '',
                                     style: TextStyle(
                                       color: isCurrentUser
                                           ? Pallete.white

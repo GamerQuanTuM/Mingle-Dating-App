@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 
 abstract class ServerConstant {
   static const int _serverPort = 8000;
-  static const String _productionUrl = "https://your-production-url.com";
+  static const String _productionUrl = "https://mingle-dating-app.onrender.com";
   // static const String _devMachineIpLocal = "10.0.2.2";
-  static const String _devMachineIp = "192.168.0.101";
+  // static const String _devMachineIp = "192.168.0.101";
 
   static String get baseUrl {
     if (const bool.fromEnvironment('dart.vm.product')) {

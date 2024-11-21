@@ -54,112 +54,114 @@ class _PhonePageState extends ConsumerState<PhonePage> {
       appBar: AppBar(
         backgroundColor: Pallete.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "My number is",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Pallete.black,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "My number is",
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Pallete.black,
+                ),
               ),
-            ),
-            const SizedBox(height: 60),
-            Form(
-              key: formKey,
-              child: Row(
-                children: [
-                  Container(
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Pallete.primaryBorder,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                    padding: const EdgeInsets.only(bottom: 0),
-                    child: CountryCodePicker(
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectedCountryCode = newValue;
-                        });
-                      },
-                      initialSelection: 'IT',
-                      favorite: const ['+39', 'FR', '91'],
-                      showCountryOnly: false,
-                      showOnlyCountryWhenClosed: false,
-                      alignLeft: false,
-                    ),
-                  ),
-                  const SizedBox(width: 25),
-                  Expanded(
-                    child: Container(
+              const SizedBox(height: 60),
+              Form(
+                key: formKey,
+                child: Row(
+                  children: [
+                    Container(
                       height: 50,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
-                            color: isFocused
-                                ? Pallete.primaryPurple
-                                : Pallete.primaryBorder,
+                            color: Pallete.primaryBorder,
                             width: 1.5,
                           ),
                         ),
                       ),
-                      child: TextField(
-                        focusNode: _focusNode,
-                        controller: phoneController,
-                        decoration: const InputDecoration(
-                          hintText: 'Phone number',
-                          border: InputBorder.none,
-                          counterText: '',
-                        ),
-                        keyboardType: TextInputType.phone,
-                        maxLength: 10,
+                      padding: const EdgeInsets.only(bottom: 0),
+                      child: CountryCodePicker(
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedCountryCode = newValue;
+                          });
+                        },
+                        initialSelection: 'IT',
+                        favorite: const ['+39', 'FR', '91'],
+                        showCountryOnly: false,
+                        showOnlyCountryWhenClosed: false,
+                        alignLeft: false,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 40),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Pallete.secondaryBorder,
+                    const SizedBox(width: 25),
+                    Expanded(
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: isFocused
+                                  ? Pallete.primaryPurple
+                                  : Pallete.primaryBorder,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        child: TextField(
+                          focusNode: _focusNode,
+                          controller: phoneController,
+                          decoration: const InputDecoration(
+                            hintText: 'Phone number',
+                            border: InputBorder.none,
+                            counterText: '',
+                          ),
+                          keyboardType: TextInputType.phone,
+                          maxLength: 10,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 40),
-            Center(
-              child: AppButton(
-                onPressed: () {
-                  if (formKey.currentState?.validate() ?? false) {
-                    setState(() {
-                      _otpFuture =
-                          ref.read(authRemoteRepositoryProvider).generateOTP(
-                                countryCode: selectedCountryCode.dialCode!,
-                                phone: phoneController.text,
-                              );
-                    });
-                  }
-                },
-                perWidth: 0.7,
-                text: "CONTINUE",
-                backgroundColor: Pallete.primaryPurple,
-                color: Pallete.white,
+              const SizedBox(height: 40),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Pallete.secondaryBorder,
+                  ),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 40),
+              Center(
+                child: AppButton(
+                  onPressed: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      setState(() {
+                        _otpFuture =
+                            ref.read(authRemoteRepositoryProvider).generateOTP(
+                                  countryCode: selectedCountryCode.dialCode!,
+                                  phone: phoneController.text,
+                                );
+                      });
+                    }
+                  },
+                  perWidth: 0.7,
+                  text: "CONTINUE",
+                  backgroundColor: Pallete.primaryPurple,
+                  color: Pallete.white,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

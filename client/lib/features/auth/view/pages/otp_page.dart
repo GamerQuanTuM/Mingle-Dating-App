@@ -138,58 +138,62 @@ class _OtpPageState extends ConsumerState<OtpPage> {
       ),
       body: isLoading || _isResending
           ? const Loader()
-          : Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 32.0, vertical: 20.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Enter OTP",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Pallete.black,
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 32.0, vertical: 20.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Enter OTP",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Pallete.black,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 60),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildOtpBox(otp1, focusNode1, focusNode2, null),
-                        _buildOtpBox(otp2, focusNode2, focusNode3, focusNode1),
-                        _buildOtpBox(otp3, focusNode3, focusNode4, focusNode2),
-                        _buildOtpBox(otp4, focusNode4, null, focusNode3),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Center(
-                      child: TextButton(
-                        onPressed: _resendOtp,
-                        child: const Text(
-                          "Resend",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            color: Pallete.primaryBorder,
+                      const SizedBox(height: 60),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildOtpBox(otp1, focusNode1, focusNode2, null),
+                          _buildOtpBox(
+                              otp2, focusNode2, focusNode3, focusNode1),
+                          _buildOtpBox(
+                              otp3, focusNode3, focusNode4, focusNode2),
+                          _buildOtpBox(otp4, focusNode4, null, focusNode3),
+                        ],
+                      ),
+                      const SizedBox(height: 40),
+                      Center(
+                        child: TextButton(
+                          onPressed: _resendOtp,
+                          child: const Text(
+                            "Resend",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Pallete.primaryBorder,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 40),
-                    Center(
-                      child: AppButton(
-                        perWidth: 0.7,
-                        text: "CONTINUE",
-                        backgroundColor: Pallete.primaryPurple,
-                        color: Pallete.white,
-                        onPressed: () => login(ref, otp),
+                      const SizedBox(height: 40),
+                      Center(
+                        child: AppButton(
+                          perWidth: 0.7,
+                          text: "CONTINUE",
+                          backgroundColor: Pallete.primaryPurple,
+                          color: Pallete.white,
+                          onPressed: () => login(ref, otp),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

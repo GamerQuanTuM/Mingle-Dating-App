@@ -129,7 +129,7 @@ class _ImagePageState extends ConsumerState<ImagePage> {
             : const [
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                      EdgeInsets.symmetric(horizontal: 24.0, vertical: 5.0),
                   child: Text(
                     "Skip",
                     style: TextStyle(
@@ -146,8 +146,8 @@ class _ImagePageState extends ConsumerState<ImagePage> {
           : DefaultTabController(
               length: 2,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 16.0),
+                padding: const EdgeInsets.only(
+                    left: 24.0, right: 24.0, bottom: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -194,11 +194,13 @@ class _ImagePageState extends ConsumerState<ImagePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    AppButton(
-                      text: "CONTINUE",
-                      backgroundColor: Pallete.primaryPurple,
-                      color: Pallete.white,
-                      onPressed: _uploadAsset,
+                    Center(
+                      child: AppButton(
+                        text: "CONTINUE",
+                        backgroundColor: Pallete.primaryPurple,
+                        color: Pallete.white,
+                        onPressed: _uploadAsset,
+                      ),
                     ),
                   ],
                 ),
@@ -208,80 +210,105 @@ class _ImagePageState extends ConsumerState<ImagePage> {
   }
 
   Widget _uploadProfilePictureWidget(BuildContext context) {
-    return Center(
-      child: Stack(
-        children: [
-          profileImage != null
-              ? InkWell(
-                  onTap: pickProfileImage,
-                  child: DottedBorder(
-                    color: Pallete.primaryBorder,
-                    strokeWidth: 2,
-                    dashPattern: const [4, 3],
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(12),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.file(
-                        profileImage!,
-                        fit: BoxFit.cover,
-                        width: 300,
-                        height: 400,
-                      ),
-                    ),
-                  ),
-                )
-              : InkWell(
-                  onTap: pickProfileImage,
-                  child: DottedBorder(
-                    color: Pallete.primaryBorder,
-                    strokeWidth: 2,
-                    dashPattern: const [4, 3],
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(12),
-                    child: Container(
-                      height: 400,
-                      width: 300,
-                      color: Pallete.transparent,
-                      child: Center(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight:
+                  constraints.maxHeight, // Ensure minimum height of parent
+              minWidth: constraints.maxWidth,
+            ),
+            child: Center(
+              child: Stack(
+                children: [
+                  profileImage != null
+                      ? InkWell(
+                          onTap: pickProfileImage,
+                          child: DottedBorder(
+                            color: Pallete.primaryBorder,
+                            strokeWidth: 2,
+                            dashPattern: const [4, 3],
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(12),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  minWidth: 300,
+                                  minHeight: 400,
+                                  maxWidth: 300,
+                                  maxHeight: 400,
+                                ),
+                                child: Image.file(
+                                  profileImage!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : InkWell(
+                          onTap: pickProfileImage,
+                          child: DottedBorder(
+                            color: Pallete.primaryBorder,
+                            strokeWidth: 2,
+                            dashPattern: const [4, 3],
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(12),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                minWidth: 300,
+                                minHeight: 400,
+                                maxWidth: 300,
+                                maxHeight: 400,
+                              ),
+                              child: Container(
+                                color: Pallete.transparent,
+                                child: Center(
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      color: Pallete.primaryPurple,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: const Icon(
+                                      Icons.add,
+                                      size: 30,
+                                      color: Pallete.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                  if (profileImage != null)
+                    Positioned(
+                      right: 0,
+                      top: 2,
+                      child: GestureDetector(
+                        onTap: removeProfileImage,
                         child: Container(
-                          height: 40,
-                          width: 40,
                           decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24.0),
                             color: Pallete.primaryPurple,
-                            borderRadius: BorderRadius.circular(50),
                           ),
                           child: const Icon(
-                            Icons.add,
-                            size: 30,
+                            Icons.close,
                             color: Pallete.white,
+                            size: 30,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-          if (profileImage != null)
-            Positioned(
-              right: 0,
-              top: 2,
-              child: GestureDetector(
-                onTap: removeProfileImage,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24.0),
-                    color: Pallete.primaryPurple,
-                  ),
-                  child: const Icon(
-                    Icons.close,
-                    color: Pallete.white,
-                    size: 30,
-                  ),
-                ),
+                ],
               ),
             ),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 

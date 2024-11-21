@@ -22,18 +22,15 @@ Policy and Cookies Policy.''';
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 1,
-                child: _buildLogo(),
-              ),
-              Expanded(
-                flex: 2,
-                child: _buildLoginOptions(context),
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLogo(),
+                const SizedBox(height: 20),
+                _buildLoginOptions(context),
+              ],
+            ),
           ),
         ),
       ),

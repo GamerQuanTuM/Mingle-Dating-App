@@ -32,6 +32,7 @@ class _ImageUploadPreviewWidgetState
   final TextEditingController _messageController = TextEditingController();
   final socket = SocketSingleton.instance.getSocket();
   late final UserWithAssetsModel messageUser;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -103,42 +104,58 @@ class _ImageUploadPreviewWidgetState
   }
 
   void _sendMessage() async {
-    final currentUser = ref.read(currentUserNotifierProvider);
+    if (isLoading) return; // Prevent multiple submissions while loading
 
-    if (currentUser != null &&
-        (widget.selectedFile != null || _messageController.text.isNotEmpty)) {
-      String? encodedFile;
-      if (widget.selectedFile != null) {
-        final bytes = await widget.selectedFile!.readAsBytes();
-        encodedFile = base64Encode(bytes);
-      }
+    setState(() {
+      isLoading = true; // Disable button
+    });
 
-      final message = {
-        'current_user_id': currentUser.id,
-        'message_user_id': messageUser.userDetails.id,
-        'message':
-            _messageController.text.isNotEmpty ? _messageController.text : null,
-        'file': encodedFile,
-      };
+    try {
+      final currentUser = ref.read(currentUserNotifierProvider);
 
-      socket.emit('chat', message);
+      if (currentUser != null &&
+          (widget.selectedFile != null || _messageController.text.isNotEmpty)) {
+        String? encodedFile;
+        if (widget.selectedFile != null) {
+          final bytes = await widget.selectedFile!.readAsBytes();
+          encodedFile = base64Encode(bytes);
+        }
 
-      await ref
-          .read(unseenMessagesViewModelProvider.notifier)
-          .unseenMessageCount(
-            recipientId: widget.matchUser.userDetails.id,
-            isUpdate: true,
+        final message = {
+          'current_user_id': currentUser.id,
+          'message_user_id': messageUser.userDetails.id,
+          'message': _messageController.text.isNotEmpty
+              ? _messageController.text
+              : null,
+          'file': encodedFile,
+        };
+
+        socket.emit('chat', message);
+
+        await ref
+            .read(unseenMessagesViewModelProvider.notifier)
+            .unseenMessageCount(
+              recipientId: widget.matchUser.userDetails.id,
+              isUpdate: true,
+            );
+
+        _messageController.clear();
+        widget.onClose();
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content:
+                    Text('Please type a message or select a file to send.')),
           );
-
-      _messageController.clear();
-      widget.onClose();
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Please type a message or select a file to send.')),
-        );
+        }
       }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false; // Re-enable button after upload finishes
+      });
     }
   }
 
@@ -213,11 +230,20 @@ class _ImageUploadPreviewWidgetState
                                 shape: BoxShape.circle,
                                 color: Pallete.primaryPurple,
                               ),
-                              child: IconButton(
-                                icon: const Icon(Icons.arrow_forward,
-                                    color: Pallete.white),
-                                onPressed: _sendMessage,
-                              ),
+                              child: isLoading
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Pallete.white),
+                                      ),
+                                    )
+                                  : IconButton(
+                                      icon: const Icon(Icons.arrow_forward,
+                                          color: Pallete.white),
+                                      onPressed: _sendMessage,
+                                    ),
                             ),
                           ],
                         ),
