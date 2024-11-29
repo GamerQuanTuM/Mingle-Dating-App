@@ -6,7 +6,6 @@ from sqlalchemy import or_, and_
 import uuid
 from config.supabase_client import upload_to_supabase
 import base64
-from io import BytesIO
 
 from models.match import Match, MatchStatus
 from config.database import get_db_socket

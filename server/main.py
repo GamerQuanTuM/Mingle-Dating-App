@@ -51,7 +51,7 @@ def ping_server():
         logging.error(f"Error pinging server: {e}")
 
 def run_scheduler():
-    schedule.every(1).minutes.do(ping_server)
+    schedule.every(15).minutes.do(ping_server)
     
     while True:
         schedule.run_pending()
