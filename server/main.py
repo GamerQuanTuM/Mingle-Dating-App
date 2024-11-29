@@ -5,17 +5,28 @@ import uvicorn
 from dotenv import load_dotenv
 from starlette.applications import Starlette
 import socketio
+import requests
+import threading
+import logging
+import schedule
+import time
+from datetime import datetime
 
 from config.database import engine
 from models.base import Base
-from routes import auth, asset, match,profile,message
+from routes import auth, asset, match, profile, message
 from sockets import sio_server
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - Server Health Ping - %(levelname)s: %(message)s',
+    filename='server_health_ping.log'
+)
 
 load_dotenv()
 
 app = FastAPI()
-
-# app.mount('/', app=sio_app)
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,11 +36,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def ping_server():
+    try:
+        server_url = "https://mingle-dating-app.onrender.com/health"  # Adjust as needed
+        
+        response = requests.get(server_url, timeout=10)
+        
+        if response.status_code == 200:
+            logging.info(f"Server health check successful at {datetime.now()}")
+        else:
+            logging.warning(f"Server returned non-200 status: {response.status_code}")
+    
+    except requests.RequestException as e:
+        logging.error(f"Error pinging server: {e}")
+
+def run_scheduler():
+    schedule.every(1).minutes.do(ping_server)
+    
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 @app.get('/health')
 def health_check():
     return JSONResponse(content={'status': 'OK'}, status_code=200)
-
 
 # Include FastAPI routes
 app.include_router(auth.router, prefix="/auth")
@@ -47,7 +77,10 @@ starlette_app.mount("/", app)
 sio_app = socketio.ASGIApp(sio_server, starlette_app, socketio_path='/sockets')
 app = sio_app
 
-app = sio_app
-
 if __name__ == "__main__":
+    # Start scheduler in a separate thread
+    scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
+    scheduler_thread.start()
+    
+    # Run the server
     uvicorn.run("main:app", reload=True, host="0.0.0.0")
